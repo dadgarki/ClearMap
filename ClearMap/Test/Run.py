@@ -217,10 +217,10 @@ def runVoxelization(parameter):
         if si is None:    
             si = parameter.Resampling.ResampledFile;
             
-    if isinstance(si, basestring):
+    if isinstance(si, str):
         si = dataSize(si);
         
-    print si
+    print(si)
 
     vox = voxelize(points, si, average = pv.AveragingDiameter, mode = pv.Mode);
     

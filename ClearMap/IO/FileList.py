@@ -32,6 +32,7 @@ import re
 import natsort
 
 import ClearMap.IO as io
+import importlib
 
 
 def readFileList(filename):
@@ -293,7 +294,7 @@ def copyData(source, sink):
 def test():    
     """Test FileList module"""  
     import ClearMap.IO.FileList as self
-    reload(self)
+    importlib.reload(self)
     
     from iDISCO.Parameter import iDISCOPath
     import os
@@ -307,32 +308,32 @@ def test():
     data = 20 * data;
     data = data.astype('int32');
     
-    print "writing raw image to: " + fn;    
+    print("writing raw image to: " + fn);    
     self.writeData(fn, data);
 
-    print "Loading raw image from: " + fn;
+    print("Loading raw image from: " + fn);
     img = self.readData(fn);  
-    print "Image size: " + str(img.shape)
+    print("Image size: " + str(img.shape))
     
     diff = img - data;
-    print (diff.max(), diff.min())
+    print((diff.max(), diff.min()))
 
     
     fn = os.path.join(basedir,'Test/Data/OME/16-17-27_0_8X-s3-20HF_UltraII_C00_xyz-Table Z\d{4}.ome.tif')        
     
     fp, fl = self.readFileList(fn);
-    print "Found " + str(len(fl)) + " images!"    
+    print("Found " + str(len(fl)) + " images!")    
     
     #dataSize
-    print "dataSize  is %s" % str(self.dataSize(fn))
-    print "dataZSize is %s" % str(self.dataZSize(fn))
+    print("dataSize  is %s" % str(self.dataSize(fn)))
+    print("dataZSize is %s" % str(self.dataZSize(fn)))
     
-    print "dataSize  is %s" % str(self.dataSize(fn, x = (10,20)))
-    print "dataZSize is %s" % str(self.dataZSize(fn))
+    print("dataSize  is %s" % str(self.dataSize(fn, x = (10,20))))
+    print("dataZSize is %s" % str(self.dataZSize(fn)))
     
     
     img = self.readData(fn, z = (17,all));  
-    print "Image size: " + str(img.shape)    
+    print("Image size: " + str(img.shape))    
     
     import iDISCO.Visualization.Plot as plt
     plt.plotTiling(img)

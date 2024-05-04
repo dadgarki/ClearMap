@@ -3,7 +3,7 @@
 #Import urlparse in Python 2 or urllib.parse in Python 3
 
 try:
-    import urlparse
+    import urllib.parse
 
 except ImportError:
     import urllib.parse as urlparse
@@ -28,14 +28,14 @@ def is_url(s):
 
 def get_video_id(url):
 
-    return urlparse.parse_qs(urlparse.urlparse(url).query)['v'][0]
+    return urllib.parse.parse_qs(urllib.parse.urlparse(url).query)['v'][0]
 
 
 def visit(self, node):
 
     video_id = node.video_id
-    url = u'//www.youtube.com/embed/{0}'.format(video_id)
-    tag = u'''<iframe width="640" height="360" src="{0}" frameborder="0" allowfullscreen="1">&nbsp;</iframe>'''.format(url)
+    url = '//www.youtube.com/embed/{0}'.format(video_id)
+    tag = '''<iframe width="640" height="360" src="{0}" frameborder="0" allowfullscreen="1">&nbsp;</iframe>'''.format(url)
 
     self.body.append(tag)
 

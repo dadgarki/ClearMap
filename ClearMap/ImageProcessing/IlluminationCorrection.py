@@ -117,7 +117,7 @@ def correctIllumination(img, correctIlluminationParameter = None, flatfield = No
         writeParameter(out = out, head = 'Illumination correction:', flatfield = fld, background = bkg, scaling = scaling, save = save);  
     
     
-    print subStack;
+    print(subStack);
  
     if not subStack is None:
         x = subStack["x"];
@@ -304,12 +304,12 @@ def flatfieldLineFromRegression(data, sink = None, method = 'polynomial', revers
         c = popt[3]; d = popt[4];
 
         if verbose:
-            print "polynomial fit: %f + %f (x- %f)^2 + %f (x- %f)^4 + %f (x- %f)^6" % (a, b, m, c, m, d, m);
+            print("polynomial fit: %f + %f (x- %f)^2 + %f (x- %f)^4 + %f (x- %f)^6" % (a, b, m, c, m, d, m));
 
         def fopt(x):
             return f(x, m = m, a = a, b = b, c = c, d = d);
         
-        flt = map(fopt, range(0, int(x[-1])));
+        flt = list(map(fopt, list(range(0, int(x[-1])))));
     
     else: 
         ## Gaussian fit
@@ -325,7 +325,7 @@ def flatfieldLineFromRegression(data, sink = None, method = 'polynomial', revers
         a = popt[0]; m = popt[1]; s = popt[2]; b = popt[3];
 
         if verbose:
-            print "Gaussian fit: %f exp(- (x- %f)^2 / (2 %f)) + %f" % (a, m, s, b);
+            print("Gaussian fit: %f exp(- (x- %f)^2 / (2 %f)) + %f" % (a, m, s, b));
 
         def fopt(x):
             return f(x, a = a, m = m, s = s, b = b);

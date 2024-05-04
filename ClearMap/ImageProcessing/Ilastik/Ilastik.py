@@ -37,6 +37,7 @@ import numpy
 import ClearMap.Settings as settings
 import ClearMap.IO as io
 import ClearMap.IO.FileList as filelist
+import importlib
 
 
 ##############################################################################
@@ -68,9 +69,9 @@ def printSettings():
     global IlastikBinary, Initialized
     
     if Initialized:
-        print "IlastikBinary     = %s" % IlastikBinary;
+        print("IlastikBinary     = %s" % IlastikBinary);
     else:
-        print "Ilastik not initialized";
+        print("Ilastik not initialized");
 
 
 def initialize(path = None):
@@ -95,12 +96,12 @@ def initialize(path = None):
     #search for elastix binary
     ilastikbin = os.path.join(path, 'run_ilastik.sh');
     if os.path.exists(ilastikbin):
-        print "Ilastik sucessfully initialized from path: %s" % path;
+        print("Ilastik sucessfully initialized from path: %s" % path);
         IlastikBinary = ilastikbin;
         Initialized = True;
         return path;
     else:
-        print "Cannot find ilastik binary %s, set path in Settings.py accordingly!" % ilastikbin;
+        print("Cannot find ilastik binary %s, set path in Settings.py accordingly!" % ilastikbin);
         IlastikBinary = None;
         Initialized = False;
         return None;
@@ -152,7 +153,7 @@ def run(args = ""):
     #    os.mkdir(resultDirectory);
     
     cmd = IlastikBinary + ' --headless ' + args;
-    print 'Ilastik: running: %s' % cmd;
+    print('Ilastik: running: %s' % cmd);
     
     res = os.system(cmd);
     
@@ -330,7 +331,7 @@ def test():
   import ClearMap.IO as io
   import ClearMap.Settings as settings
   import ClearMap.ImageProcessing.Ilastik as il;
-  reload(il);
+  importlib.reload(il);
   
   ilp = os.path.join(settings.ClearMapPath, 'Test/Ilastik/Test.ilp')
   src = os.path.join(settings.ClearMapPath, 'Test/Data/ImageAnalysis/cfos-substack.tif');
@@ -339,6 +340,6 @@ def test():
   #out = os.path.join(settings.ClearMapPath, 'Test/Data/Ilastik/result\d*.tif');
   
   cls = il.classifyPixel(ilp, src, out);
-  print io.dataSize(src)
-  print cls.shape
+  print(io.dataSize(src))
+  print(cls.shape)
   io.writeData('/home/ckirst/result.raw', cls);

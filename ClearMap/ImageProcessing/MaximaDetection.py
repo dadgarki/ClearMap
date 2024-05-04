@@ -325,7 +325,7 @@ def findIntensity(img, centers, findIntensityParameter = None, method = None, si
     
     offs = structureElementOffsets(size);
     
-    if isinstance(method, basestring):
+    if isinstance(method, str):
         method = eval('numpy.' + method.lower());
 
 

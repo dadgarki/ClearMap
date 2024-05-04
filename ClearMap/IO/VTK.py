@@ -42,7 +42,7 @@ def writePoints(filename, points, labelImage = None):
     
     pointLabels = numpy.ones(nPoint);
     if not labelImage is None:
-        if isinstance(labelImage, basestring):
+        if isinstance(labelImage, str):
             labelImage = io.readData(labelImage);
             
         dsize = labelImage.shape;

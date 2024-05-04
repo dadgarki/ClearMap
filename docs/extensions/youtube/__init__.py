@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-u'''
+'''
 embedding youtube video to sphinx
 
 usage:

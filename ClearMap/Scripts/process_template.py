@@ -4,7 +4,7 @@ Template to run the processing pipeline
 """
 
 #load the parameters:
-execfile('/home/yourname/experiment/parameter_file_sampleID.py')
+exec(compile(open('/home/yourname/experiment/parameter_file_sampleID.py', "rb").read(), '/home/yourname/experiment/parameter_file_sampleID.py', 'exec'))
 
 
 #resampling operations:
@@ -74,13 +74,13 @@ intensities = io.readPoints(FilteredCellsFile[1])
 
 #Without weigths:
 vox = voxelize(points, AtlasFile, **voxelizeParameter);
-if not isinstance(vox, basestring):
+if not isinstance(vox, str):
   io.writeData(os.path.join(BaseDirectory, 'cells_heatmap.tif'), vox.astype('int32'));
 
 #With weigths from the intensity file (here raw intensity):
 voxelizeParameter["weights"] = intensities[:,0].astype(float);
 vox = voxelize(points, AtlasFile, **voxelizeParameter);
-if not isinstance(vox, basestring):
+if not isinstance(vox, str):
   io.writeData(os.path.join(BaseDirectory, 'cells_heatmap_weighted.tif'), vox.astype('int32'));
 
 

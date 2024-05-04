@@ -52,7 +52,7 @@ dataMax = findExtendedMaxima(dataDoG, hMax = None, verbose = True, threshold = 1
 
 from ClearMap.ImageProcessing.MaximaDetection import findCenterOfMaxima
 cells = findCenterOfMaxima(data, dataMax);
-print cells.shape
+print(cells.shape)
 
 plt.plotOverlayPoints(data, cells, z = (10,16))
 

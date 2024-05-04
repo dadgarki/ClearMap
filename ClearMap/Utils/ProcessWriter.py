@@ -39,7 +39,7 @@ class ProcessWriter(object):
             text (str): the text input
         """
         
-        print self.writeString(text);
+        print(self.writeString(text));
         sys.stdout.flush();
 
     

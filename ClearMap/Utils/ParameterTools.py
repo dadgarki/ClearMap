@@ -25,7 +25,7 @@ def getParameter(parameter, key, default = None):
     if not isinstance(parameter, dict):
         return default;
     
-    if key in parameter.keys():
+    if key in list(parameter.keys()):
         return parameter[key];
     else:
         return default;
@@ -45,8 +45,8 @@ def writeParameter(head = None, out = None, **args):
     if head is None:
         head = '';
         
-    keys = args.keys();
-    vals = args.values();
+    keys = list(args.keys());
+    vals = list(args.values());
     parsize = max([len(x) for x in keys]);
     
     s = [head + ' ' + keys[i].ljust(parsize) + ': ' + str(vals[i]) for i in range(len(keys))];
@@ -69,7 +69,7 @@ def joinParameter(*args):
         dict: the joined dictionary
     """
     
-    keyList = [x.keys() for x in args];
+    keyList = [list(x.keys()) for x in args];
     n = len(args);
     
     keys = [];

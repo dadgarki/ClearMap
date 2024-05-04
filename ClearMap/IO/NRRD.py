@@ -30,6 +30,7 @@ import os.path
 from datetime import datetime
 
 import ClearMap.IO as io
+import importlib
 
 class NrrdError(Exception):
     """Exceptions for Nrrd class."""
@@ -301,7 +302,7 @@ def readHeader(filename):
     {'keyvaluepairs': {'my extra info': 'my : colon-separated : values'}}
     """
     
-    if isinstance(filename, basestring):
+    if isinstance(filename, str):
         nrrdfile = open(filename,'rb');
     else:
         nrrdfile = filename;
@@ -348,7 +349,7 @@ def readHeader(filename):
             desc = desc.rstrip().lstrip()
             if field not in _NRRD_FIELD_PARSERS:
                 raise NrrdError('Unexpected field in nrrd header: "%s".' % field)
-            if field in header.keys():
+            if field in list(header.keys()):
                 raise NrrdError('Duplicate header field: "%s"' % field)
             header[field] = _NRRD_FIELD_PARSERS[field](desc)
             continue
@@ -478,7 +479,7 @@ def writeData(filename, data, options={}, separateHeader=False, x = all, y = all
     if data.dtype.itemsize > 1:
         options['endian'] = _NUMPY2NRRD_ENDIAN_MAP[data.dtype.str[:1]]
     # if 'space' is specified 'space dimension' can not. See http://teem.sourceforge.net/nrrd/format.html#space
-    if 'space' in options.keys() and 'space dimension' in options.keys():
+    if 'space' in list(options.keys()) and 'space dimension' in list(options.keys()):
         del options['space dimension']
     options['dimension'] = data.ndim
     dsize = list(data.shape);
@@ -529,7 +530,7 @@ def writeData(filename, data, options={}, separateHeader=False, x = all, y = all
                            '\n').encode('ascii')
                 filehandle.write(outline)
         d = options.get('keyvaluepairs', {})
-        for (k,v) in sorted(d.items(), key=lambda t: t[0]):
+        for (k,v) in sorted(list(d.items()), key=lambda t: t[0]):
             outline = (str(k) + ':=' + str(v) + '\n').encode('ascii')
             filehandle.write(outline)
 
@@ -606,7 +607,7 @@ def copyData(source, sink):
 def test():
     """Test NRRD IO module"""
     import ClearMap.IO.NRRD as self 
-    reload(self)
+    importlib.reload(self)
     
     from ClearMap.Settings import ClearMapPath
     import os
@@ -619,36 +620,36 @@ def test():
     data = numpy.random.rand(20,50,10);
     data[5:15, 20:45, 2:9] = 0;
 
-    reload(self)
-    print "writing nrrd image to: " + fn;    
+    importlib.reload(self)
+    print("writing nrrd image to: " + fn);    
     self.writeData(fn, data);
     
     ds = self.dataSize(fn);
-    print "dataSize: %s" % str(ds);
+    print("dataSize: %s" % str(ds));
 
-    print "Loading raw image from: " + fn;
+    print("Loading raw image from: " + fn);
     img = self.readData(fn);  
-    print "Image size: " + str(img.shape)
+    print("Image size: " + str(img.shape))
     
     diff = img - data;
-    print (diff.max(), diff.min())
+    print((diff.max(), diff.min()))
 
     #some uint type
-    print "writing raw image to: " + fn;    
+    print("writing raw image to: " + fn);    
     udata = data * 10;
     udata = udata.astype('uint16');
     self.writeData(fn, udata);
 
-    print "Loading raw image from: " + fn;
+    print("Loading raw image from: " + fn);
     img = self.readData(fn);  
-    print "Image size: " + str(img.shape)
+    print("Image size: " + str(img.shape))
     
     diff = img - udata;
-    print (diff.max(), diff.min())
+    print((diff.max(), diff.min()))
     
     #dataSize
-    print "dataSize  is %s" % str(self.dataSize(fn))
-    print "dataZSize is %s" % str(self.dataZSize(fn))
+    print("dataSize  is %s" % str(self.dataSize(fn)))
+    print("dataZSize is %s" % str(self.dataZSize(fn)))
 
 if __name__ == "__main__":
     test();

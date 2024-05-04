@@ -59,6 +59,6 @@ def  extrap1dFromInterp1d(interpolator, exterpolation = 'constant'):
                 return interpolator(x)
 
     def extrapfunc(xs):
-        return array(map(pointwise, array(xs)))
+        return array(list(map(pointwise, array(xs))))
 
     return extrapfunc

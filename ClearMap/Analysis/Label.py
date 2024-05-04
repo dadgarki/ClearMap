@@ -35,6 +35,7 @@ import collections
 import ClearMap.IO as io
 
 from ClearMap.Settings import ClearMapPath
+import importlib
 
 DefaultLabeledImageFile = os.path.join(ClearMapPath, 'Test/Data/Annotation/annotation_25_right.tif');
 """str: default volumetric annotated image file
@@ -91,7 +92,7 @@ class LabelInfo(object):
         with open(annotationFile) as dfile:
             reader = csv.reader(dfile);
             #skip header
-            reader.next();
+            next(reader);
             labels = [LabelRecord._make((int(row[0]), row[1], row[2], [int(row[3]), int(row[4]), int(row[5])], _labelToInt(row[7]), _collapseToBool(row[9]))) for row in reader];
             
             dfile.close();
@@ -373,7 +374,7 @@ def test():
     """Test Label module"""
 
     import ClearMap.Analysis.Label as self
-    reload(self)
+    importlib.reload(self)
     import numpy
     points = numpy.array([[162, 200, 138], [246, 486, 138], [246, 486, 138]]);
     intensities = numpy.array([1,2,3]);

@@ -80,6 +80,7 @@ import ClearMap.IO.IO as io
 import ClearMap.IO.FileList as fl
 
 from ClearMap.Utils.ProcessWriter import ProcessWriter;
+import importlib
 
 
 def fixOrientation(orientation):
@@ -418,7 +419,7 @@ def resampleData(source, sink = None,  orientation = None, dataSizeSink = None, 
         
     orientation = fixOrientation(orientation);
     
-    if isinstance(dataSizeSink, basestring):
+    if isinstance(dataSizeSink, str):
         dataSizeSink = io.dataSize(dataSizeSink);
 
     #orient actual resolutions onto reference resolution    
@@ -452,7 +453,7 @@ def resampleData(source, sink = None,  orientation = None, dataSizeSink = None, 
     zImage = numpy.zeros((dataSizeSinkI[0], dataSizeSinkI[1], nZ), dtype = data.dtype);    
     for i in range(nZ):
         if verbose and i % 10 == 0:
-            print "resampleData; reading %d/%d" % (i, nZ);
+            print("resampleData; reading %d/%d" % (i, nZ));
         fn = os.path.join(processingDirectory, 'resample_%04d.tif' % i);
         zImage[:,:, i] = io.readData(fn);
 
@@ -461,7 +462,7 @@ def resampleData(source, sink = None,  orientation = None, dataSizeSink = None, 
 
     for i in range(dataSizeSinkI[0]):
         if verbose and i % 25 == 0:
-            print "resampleData: processing %d/%d" % (i, dataSizeSinkI[0])
+            print("resampleData: processing %d/%d" % (i, dataSizeSinkI[0]))
         #resampledImage[:, iImage ,:] =  scipy.misc.imresize(zImage[:,iImage,:], [resizedZAxisSize, sagittalImageSize[1]] , interp = 'bilinear'); 
         #cv2.resize takes reverse order of sizes !
         resampledData[i ,:, :] =  cv2.resize(zImage[i,:,:], (dataSizeSinkI[2], dataSizeSinkI[1]), interpolation = interpolation);
@@ -492,13 +493,13 @@ def resampleData(source, sink = None,  orientation = None, dataSizeSink = None, 
         #bring back from y,x,z to z,y,x
         #resampledImage = resampledImage.transpose([2,0,1]);
     if verbose:
-        print "resampleData: resampled data size: " + str(resampledData.shape)  
+        print("resampleData: resampled data size: " + str(resampledData.shape))  
     
     if sink == []:
         if io.isFileExpression(source):
             sink = os.path.split(source);
             sink = os.path.join(sink[0], 'resample_\d{4}.tif');
-        elif isinstance(source, basestring):
+        elif isinstance(source, str):
             sink = source + '_resample.tif';
         else:
             raise RuntimeError('resampleData: automatic sink naming not supported for non string source!');
@@ -548,7 +549,7 @@ def resampleDataInverse(sink, source = None, dataSizeSource = None, orientation 
 
     dataSizeSink = resampledData.shape;
     
-    if isinstance(dataSizeSource, basestring):
+    if isinstance(dataSizeSource, str):
         dataSizeSource = io.dataSize(dataSizeSource);
 
     dataSizeSource, dataSizeSink, resolutionSource, resolutionSink = resampleDataSize(dataSizeSource = dataSizeSource, dataSizeSink = dataSizeSink, 
@@ -581,7 +582,7 @@ def resampleDataInverse(sink, source = None, dataSizeSource = None, orientation 
     
     for i in range(dataSizeSinkI[0]):
         if verbose and i % 25 == 0:
-            print "resampleDataInverse: processing %d/%d" % (i, dataSizeSinkI[0])
+            print("resampleDataInverse: processing %d/%d" % (i, dataSizeSinkI[0]))
 
         #cv2.resize takes reverse order of sizes !
         resampledDataXY[i ,:, :] =  cv2.resize(resampledData[i,:,:], (dataSizeSource[2], dataSizeSinkI[1]), interpolation = interpolation);
@@ -650,7 +651,7 @@ def resamplePoints(pointSource, pointSink = None, dataSizeSource = None, dataSiz
     orientation = fixOrientation(orientation);
 
     #datasize of data source
-    if isinstance(dataSizeSource, basestring):
+    if isinstance(dataSizeSource, str):
         dataSizeSource = io.dataSize(dataSizeSource);
     
     dataSizeSource, dataSizeSink, resolutionSource, resolutionSink = resampleDataSize(dataSizeSource = dataSizeSource, dataSizeSink = dataSizeSink, 
@@ -712,7 +713,7 @@ def resamplePointsInverse(pointSource, pointSink = None, dataSizeSource = None, 
     orientation = fixOrientation(orientation);
     
     #datasize of data source
-    if isinstance(dataSizeSource, basestring):
+    if isinstance(dataSizeSource, str):
         dataSizeSource = io.dataSize(dataSizeSource);
     
     dataSizeSource, dataSizeSink, resolutionSource, resolutionSink = resampleDataSize(dataSizeSource = dataSizeSource, dataSizeSink = dataSizeSink, 
@@ -764,7 +765,7 @@ def sagittalToCoronalData(source, sink = None):
     if d < 3:
         raise RuntimeError('sagittalToCoronalData: 3d image required!');
     
-    tp = range(d);
+    tp = list(range(d));
     tp[0:3] = [2,0,1];
     source = source.transpose(tp);
     source = source[::-1];
@@ -777,7 +778,7 @@ def sagittalToCoronalData(source, sink = None):
 def _test():
     """Tests for the Resampling Module"""
     import ClearMap.Alignment.Resampling as self
-    reload(self)
+    importlib.reload(self)
     from ClearMap.Settings import ClearMapPath as basedir 
     import iDISCO.IO.IO as io
     import os, numpy
@@ -785,34 +786,34 @@ def _test():
     fn = os.path.join(basedir, 'Test/Data/OME/16-17-27_0_8X-s3-20HF_UltraII_C00_xyz-Table Z\d{4}.ome.tif');
     outfn = os.path.join(basedir, "Test/Data/Resampling/test.mhd")
     
-    print "Making resampled stack " + outfn
-    print "source datasize %s" % str(io.dataSize(fn));
+    print("Making resampled stack " + outfn)
+    print("source datasize %s" % str(io.dataSize(fn)));
     data = self.resampleData(fn, sink = None, resolutionSource = (1,1,1), orientation = (1,2,3), resolutionSink = (10,10,2));
-    print data.shape
+    print(data.shape)
     io.writeData(outfn, data)   
 
     data = self.resampleData(fn, sink = None, dataSizeSink = (50,70,10), orientation = (1,2,3));
-    print data.shape
+    print(data.shape)
     io.writeData(outfn, data)   
 
 
     dataSizeSource, dataSizeSink, resolutionSource, resolutionSink = self.resampleDataSize(dataSizeSource = (100,200, 303), dataSizeSink = None, 
                                                                                       resolutionSource = (1,1,1), resolutionSink = (5,5,5), orientation = (1,2,3));
 
-    print dataSizeSource, dataSizeSink, resolutionSource, resolutionSink
+    print(dataSizeSource, dataSizeSink, resolutionSource, resolutionSink)
     
 
     points = numpy.array([[0,0,0], [1,1,1], io.dataSize(fn)]);
     points = points.astype('float')
     pr = self.resamplePoints(points, dataSizeSource = fn, dataSizeSink = (50,70,10), orientation = (1,2,3))
-    print pr
+    print(pr)
 
     pri = self.resamplePointsInverse(pr, dataSizeSource = fn, dataSizeSink = (50,70,10), orientation = (-1,2,3))
-    print pri
+    print(pri)
 
 
     result = self.resampleDataInverse(outfn, os.path.join(basedir, 'Test/Data/OME/resample_\d{4}.ome.tif'), dataSizeSource = fn);
-    print result
+    print(result)
 
 if __name__ == "__main__":
     _test();

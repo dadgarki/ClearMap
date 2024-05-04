@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 
 import ClearMap.IO as io
 import ClearMap.Analysis.Voxelization as vox
+import importlib
 
 
 def plotTiling(dataSource, tiling = "automatic", maxtiles = 20, x = all, y = all, z = all, inverse = False): 
@@ -42,7 +43,7 @@ def plotTiling(dataSource, tiling = "automatic", maxtiles = 20, x = all, y = all
     dim = image.ndim;
     
     if dim < 2 or dim > 4:
-        raise StandardError('plotTiling: image dimension must be 2 to 4');    
+        raise Exception('plotTiling: image dimension must be 2 to 4');    
     
     if dim == 2:
         image = image.reshape(image.shape + (1,));
@@ -62,7 +63,7 @@ def plotTiling(dataSource, tiling = "automatic", maxtiles = 20, x = all, y = all
         cmap = None;
     
     if ntiles > maxtiles:
-        print "plotTiling: number of tiles %d very big! Clipping at %d!" % (ntiles, maxtiles);
+        print("plotTiling: number of tiles %d very big! Clipping at %d!" % (ntiles, maxtiles));
         ntiles = maxtiles;
     
     if tiling == "automatic":
@@ -257,7 +258,7 @@ def test():
     """Test Plot module"""
     import numpy as np
     import ClearMap.Visualization.Plot as self
-    reload(self)
+    importlib.reload(self)
     
     l = np.array([[0,0,0,0,0], [0,1,1,0,0], [3,0,5,0,2], [5,0,0,0,0], [4,4,0,0,0]])
     x = np.random.rand(5,5);  

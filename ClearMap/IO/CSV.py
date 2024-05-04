@@ -21,6 +21,7 @@ Example:
 import numpy
 
 import ClearMap.IO as io;
+import importlib
 
 
 def writePoints(filename, points, **args):
@@ -57,22 +58,22 @@ def test():
     """Test CSV module"""
     import os
     import ClearMap.IO.CSV as self
-    reload(self)
+    importlib.reload(self)
     
     fn = os.path.split(self.__file__);
     fn = os.path.join(fn[0], '../Test/ImageProcessing/points.txt');
     
     points = numpy.random.rand(5,3);
     self.writePoints(fn, points);  
-    print "Write points to " + fn;
-    print "Points:"
-    print points
+    print("Write points to " + fn);
+    print("Points:")
+    print(points)
     
     points2 = self.readPoints(fn);
-    print "Read points: "
-    print points2
+    print("Read points: ")
+    print(points2)
     
-    print "Difference: " + str(numpy.abs(points-points2).max())
+    print("Difference: " + str(numpy.abs(points-points2).max()))
     
 
 if __name__ == "__main__":

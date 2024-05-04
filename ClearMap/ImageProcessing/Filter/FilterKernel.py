@@ -188,7 +188,7 @@ def filterKernel2D(ftype = 'Gaussian', size = (5,5), sigma = None, sigma2 = None
         return ker - sub / sub.sum();
         
     else:
-        raise StandardError('filter type ' + ftype + ' not implemented!');
+        raise Exception('filter type ' + ftype + ' not implemented!');
 
 
 def filterKernel3D(ftype = 'Gaussian', size = (5,5,5), sigma = None, sigma2 = None, radius = None):
@@ -332,14 +332,14 @@ def filterKernel3D(ftype = 'Gaussian', size = (5,5,5), sigma = None, sigma2 = No
         return ker - sub / sub.sum();
         
     else:
-        raise StandardError('filter type ' + ftype + ' not implemented!');
+        raise Exception('filter type ' + ftype + ' not implemented!');
 
 
 
 def test():
     """Test FilterKernel module"""
     fk = filterKernel(ftype = 'Gaussian', size = (5,5), sigma = None, radius = None, sigma2 = None);
-    print fk
+    print(fk)
     
     
     

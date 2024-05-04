@@ -9,6 +9,7 @@ import numpy
 import math
 
 import pyximport;
+import importlib
 pyximport.install(setup_args={"include_dirs":numpy.get_include()}, reload_support=True)
 
 import ClearMap.IO as io
@@ -35,7 +36,7 @@ def voxelize(points, dataSize = None, sink = None, voxelizeParameter = None,  me
     
     if dataSize is None:
         dataSize = tuple(int(math.ceil(points[:,i].max())) for i in range(points.shape[1]));
-    elif isinstance(dataSize, basestring):
+    elif isinstance(dataSize, str):
         dataSize = io.dataSize(dataSize);
     
     points = io.readPoints(points);
@@ -75,7 +76,7 @@ def voxelizePixel(points,  dataSize = None, weights = None):
     
     if dataSize is None:
         dataSize = tuple(int(math.ceil(points[:,i].max())) for i in range(points.shape[1]));
-    elif isinstance(dataSize, basestring):
+    elif isinstance(dataSize, str):
         dataSize = io.dataSize(dataSize);
     
     if weights is None:
@@ -97,7 +98,7 @@ def test():
     """Test voxelization module"""
     
     import iDISCO.Analysis.Voxelization as self
-    reload(self)
+    importlib.reload(self)
     
     import iDISCO.Analysis.VoxelizationCode as vox
     import numpy

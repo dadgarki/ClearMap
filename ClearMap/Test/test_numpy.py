@@ -16,7 +16,7 @@ def dosomething(x):
 z = np.random.rand(215000,5);
 
 
-print z.shape
+print(z.shape)
 y = dosomething(z);
-print z.shape
-print y.shape
+print(z.shape)
+print(y.shape)

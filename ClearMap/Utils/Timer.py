@@ -57,7 +57,7 @@ class Timer(object):
         Arguments:
             head (str or None): prefix to the string
         """
-        print self.elapsedTime(head = head);
+        print(self.elapsedTime(head = head));
     
     def formatElapsedTime(self, t):
         """Format time to string

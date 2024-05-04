@@ -10,6 +10,7 @@ TODO: cleanup / make generic
 #:license: GNU, see LICENSE.txt for details.
 
 import sys
+import importlib
 self = sys.modules[__name__];
 
 import numpy
@@ -463,7 +464,7 @@ def testCompletedCumulativesInSpheres(points1, intensities1, points2, intensitie
 def test():
     """Test the statistics array"""
     import ClearMap.Analysis.Statistics as self
-    reload(self)
+    importlib.reload(self)
     import numpy, os
     #x = stats.norm.rvs(loc=5,scale=1,size=1500)
     #y = stats.norm.rvs(loc=-5,scale=1,size=1500)
@@ -475,7 +476,7 @@ def test():
     
     # print stats.ttest_ind(x,y, axis = 0, equal_var = False);
     pvals, psign = self.tTestVoxelization(x,y, signed = True);
-    print pvals
+    print(pvals)
     
     pvalscol = self.colorPValues(pvals, psign, positive = [255,0,0], negative = [0,255,0])
     

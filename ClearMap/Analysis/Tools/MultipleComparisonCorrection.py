@@ -125,7 +125,7 @@ def estimateQValues(pvalues, m = None, pi0 = None, verbose = False, lowMemory = 
         qv[last_pvalues] = (pi0*pvalues[last_pvalues]*m)/float(m)
         pvalues[last_pvalues] = -scipy.inf
         prev_qv = last_pvalues
-        for i in xrange(int(len(pvalues))-2, -1, -1):
+        for i in range(int(len(pvalues))-2, -1, -1):
             cur_max = pvalues.argmax()
             qv_i = (pi0*m*pvalues[cur_max]/float(i+1))
             pvalues[cur_max] = -scipy.inf
@@ -139,7 +139,7 @@ def estimateQValues(pvalues, m = None, pi0 = None, verbose = False, lowMemory = 
         qv = pi0 * m/len(pvalues) * pvalues
         qv[-1] = min(qv[-1],1.0)
 
-        for i in xrange(len(pvalues)-2, -1, -1):
+        for i in range(len(pvalues)-2, -1, -1):
             qv[i] = min(pi0*m*pvalues[i]/(i+1.0), qv[i+1])
         
         # reorder qvalues

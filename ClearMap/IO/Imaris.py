@@ -28,6 +28,7 @@ import h5py
 import numpy
 
 import ClearMap.IO as io
+import importlib
 
 
 def openFile(filename, mode = "a"):
@@ -248,7 +249,7 @@ def writePoints(filename, points, mode = "o", radius = 0.5, scale = all, offset 
         This routine is still experimental !
     """
     
-    if isinstance(filename, basestring):
+    if isinstance(filename, str):
         h5file = openFile(filename);
     else:
         h5file = filename;
@@ -309,7 +310,7 @@ def writePoints(filename, points, mode = "o", radius = 0.5, scale = all, offset 
     npts = points.shape[0];
     
     if points.shape[1] != 3:
-        raise StandardError("Points shape is not (n,3)!");
+        raise Exception("Points shape is not (n,3)!");
     
     #points = points[:,[0,1,2]]; # todo: check exchange of coordinates
     
@@ -323,7 +324,7 @@ def writePoints(filename, points, mode = "o", radius = 0.5, scale = all, offset 
     pointsS = points.copy();
     pointsS = transformPointsToImaris(pointsS, scale = scale, offset = offset);
     
-    print pointsS    
+    print(pointsS)    
     
     pts = numpy.c_[pointsS, radius * numpy.ones(npts)];
     ts =  numpy.zeros(npts);
@@ -341,7 +342,7 @@ def writePoints(filename, points, mode = "o", radius = 0.5, scale = all, offset 
         del h5file[pnc];
     h5file.create_dataset(pnc, shape=pts.shape, dtype='f32', data=pts);
     
-    if isinstance(filename, basestring):
+    if isinstance(filename, str):
         h5file.close();
     
     return filename;
@@ -385,7 +386,7 @@ def copyData(source, sink):
 def test():
     """Test Imaris module"""
     import ClearMap.IO.Imaris as self
-    reload(self)
+    importlib.reload(self)
     
     from ClearMap.Settings import ClearMapPath
     import os
@@ -401,7 +402,7 @@ def test():
     
     dsname = "/DataSet/ResolutionLevel 0/TimePoint 0/Channel 0/Data"
     ds = f.get(dsname)
-    print ds.shape
+    print(ds.shape)
 
     data = numpy.random.rand(20,50,10);
     data[5:15, 20:45, 2:9] = 0;
@@ -409,7 +410,7 @@ def test():
     data = data.astype('int32');
 
     #reload(self)
-    print "writing raw image to: " + fn;    
+    print("writing raw image to: " + fn);    
     self.writeData(fn, data);
    
     

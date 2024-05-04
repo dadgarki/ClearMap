@@ -19,10 +19,11 @@ Example:
 import os
 import numpy
 
-import vtk
-from vtk.util.numpy_support import vtk_to_numpy
+from . import vtk
+from .vtk.util.numpy_support import vtk_to_numpy
 
 import ClearMap.IO as io
+import importlib
 
 
 def dataSize(filename, **args):
@@ -91,7 +92,7 @@ def readData(filename, x = all, y = all, z = all):
     im = imr.GetOutput()
     dims = im.GetDimensions()
     
-    print dims    
+    print(dims)    
     
     sc = im.GetPointData().GetScalars()
     img = vtk_to_numpy(sc)
@@ -138,7 +139,7 @@ def writeHeader(filename, meta_dict):
        'ElementDataFile',
        'Comment','SeriesDescription','AcquisitionDate','AcquisitionTime','StudyDate','StudyTime']
     for tag in tags:
-        if tag in meta_dict.keys():
+        if tag in list(meta_dict.keys()):
             header += '%s = %s\n'%(tag,meta_dict[tag])
     f = open(filename,'w')
     f.write(header)
@@ -288,7 +289,7 @@ def copyData(source, sink):
 def test():
     """Test RAW io module"""
     import ClearMap.IO.RAW as self
-    reload(self)
+    importlib.reload(self)
     
     from ClearMap.Settings import ClearMapPath
     import os
@@ -302,33 +303,33 @@ def test():
     data[5:15, 20:45, 2:9] = 0;
 
     #reload(self)
-    print "writing raw image to: " + fn;    
+    print("writing raw image to: " + fn);    
     self.writeData(fn, data);
 
-    print "Loading raw image from: " + fn;
+    print("Loading raw image from: " + fn);
     img = self.readData(fn);  
-    print "Image size: " + str(img.shape)
+    print("Image size: " + str(img.shape))
     
     diff = img - data;
-    print (diff.max(), diff.min())
+    print((diff.max(), diff.min()))
 
     #some uint type
-    print "writing raw image to: " + fn;    
+    print("writing raw image to: " + fn);    
     udata = data * 10;
     udata = udata.astype('uint16');
     self.writeData(fn, udata);
 
-    print "Loading raw image from: " + fn;
+    print("Loading raw image from: " + fn);
     img = self.readData(fn);  
-    print "Image size: " + str(img.shape)
+    print("Image size: " + str(img.shape))
     
     diff = img - udata;
-    print (diff.max(), diff.min())
+    print((diff.max(), diff.min()))
     
     
     #dataSize
-    print "dataSize  is %s" % str(self.dataSize(fn))
-    print "dataZSize is %s" % str(self.dataZSize(fn))
+    print("dataSize  is %s" % str(self.dataSize(fn)))
+    print("dataZSize is %s" % str(self.dataZSize(fn)))
     
 
 if __name__ == "__main__":

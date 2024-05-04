@@ -56,6 +56,7 @@ import re
 
 import ClearMap.Settings as settings
 import ClearMap.IO as io
+import importlib
 
 ##############################################################################
 ### Initialization and Enviroment Settings
@@ -100,11 +101,11 @@ def printSettings():
     global ElastixBinary, ElastixLib, TransformixBinary, Initialized
     
     if Initialized:
-        print "ElastixBinary     = %s" % ElastixBinary;
-        print "ElastixLib        = %s" % ElastixLib;
-        print "TransformixBinary = %s" % TransformixBinary;
+        print("ElastixBinary     = %s" % ElastixBinary);
+        print("ElastixLib        = %s" % ElastixLib);
+        print("TransformixBinary = %s" % TransformixBinary);
     else:
-        print "Elastix not initialized";
+        print("Elastix not initialized");
 
 
 def setElastixLibraryPath(path = None): 
@@ -125,14 +126,14 @@ def setElastixLibraryPath(path = None):
         ldpath = 'DYLD_LIBRARY_PATH';
     print(ldpath)
     
-    if os.environ.has_key(ldpath):
+    if ldpath in os.environ:
         lp = os.environ[ldpath];
         if not path in lp.split(':'):
             os.environ[ldpath] = lp + ':' + path;
     else:
         os.environ[ldpath] = path
         
-    print(os.environ[ldpath])
+    print((os.environ[ldpath]))
 
 
 def initializeElastix(path = None):
@@ -178,7 +179,7 @@ def initializeElastix(path = None):
         
     Initialized = True;
     
-    print "Elastix sucessfully initialized from path: %s" % path;
+    print("Elastix sucessfully initialized from path: %s" % path);
     
     import platform
     systemname = platform.system()
@@ -509,7 +510,7 @@ def transformData(source, sink = [], transformParameterFile = None, transformDir
     if isinstance(source, numpy.ndarray):
         imgname = os.path.join(tempfile.gettempdir(), 'elastix_input.tif');
         io.writeData(source, imgname);
-    elif isinstance(source, basestring):
+    elif isinstance(source, str):
         if io.dataFileNameToType(source) == "TIF":
             imgname = source;
         else:
@@ -549,7 +550,7 @@ def transformData(source, sink = [], transformParameterFile = None, transformDir
         raise RuntimeError('transformData: failed executing: ' + cmd);
     
     
-    if not isinstance(source, basestring):
+    if not isinstance(source, str):
         os.remove(imgname);
 
     if sink == []:
@@ -557,7 +558,7 @@ def transformData(source, sink = [], transformParameterFile = None, transformDir
     elif sink is None:
         resultfile = getResultDataFile(resultdirname);
         return io.readData(resultfile);
-    elif isinstance(sink, basestring):
+    elif isinstance(sink, str):
         resultfile = getResultDataFile(resultdirname);
         return io.convertData(resultfile, sink);
     else:
@@ -620,7 +621,7 @@ def deformationField(sink = [], transformParameterFile = None, transformDirector
         if resultDirectory is None:
             shutil.rmtree(resultdirname);
         return data;
-    elif isinstance(sink, basestring):
+    elif isinstance(sink, str):
         resultfile = getResultDataFile(resultdirname);
         data = io.convertData(resultfile, sink);
         if resultDirectory is None:
@@ -709,7 +710,7 @@ def transformPoints(source, sink = None, transformParameterFile = None, transfor
         tmpFile = os.path.join(tempfile.tempdir, 'elastix_input.txt');
 
     # write text file
-    if isinstance(source, basestring):
+    if isinstance(source, str):
         
         #check if we have elastix signature                 
         with open(source) as f:
@@ -794,7 +795,7 @@ def transformPoints(source, sink = None, transformParameterFile = None, transfor
 def test():
     """Test Elastix module"""
     import ClearMap.Alignment.Elastix as self
-    reload(self)
+    importlib.reload(self)
     
     from ClearMap.Settings import ClearMapPath;
     import os, numpy
@@ -803,10 +804,10 @@ def test():
     
     resultdir = os.path.join(p, 'Test/Elastix/Output');
     
-    print 'Searching for transformation parameter file in ' + resultdir;
+    print('Searching for transformation parameter file in ' + resultdir);
     pf = self.getTransformParameterFile(resultdir)
       
-    print 'Found: ' + pf;
+    print('Found: ' + pf);
     
     
     #replace path in trasform parameter files:
@@ -819,11 +820,11 @@ def test():
     #transform points
     pts = numpy.random.rand(5,3);    
      
-    print 'Transforming points: '
+    print('Transforming points: ')
     tpts = self.transformPoints(pts, transformParameterFile = pf, indices = False);
-    print pts
-    print 'Transformed points: '
-    print tpts
+    print(pts)
+    print('Transformed points: ')
+    print(tpts)
     
     
     #deformation and distance fields     

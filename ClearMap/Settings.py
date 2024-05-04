@@ -64,13 +64,13 @@ def setup():
     if not ElastixPath is None:
         if not os.path.exists(ElastixPath):
             #raise RuntimeWarning('Settings: elastix path %s does not exists, cf. Settings.py or type help(Settings) for details.' % ElastixPath);
-            print 'Settings: elastix path %s does not exists, cf. Settings.py or type help(Settings) for details.' % ElastixPath;
+            print('Settings: elastix path %s does not exists, cf. Settings.py or type help(Settings) for details.' % ElastixPath);
             ElastixPath = None;
     
     if not IlastikPath is None:
         if not os.path.exists(IlastikPath):
             #raise RuntimeWarning('Settings: ilastik path %s does not exists, cf. Settings.py or type help(Settings) for details.' % IlastikPath);
-            print 'Settings: ilastik path %s does not exists, cf. Settings.py or type help(Settings) for details.' % IlastikPath;
+            print('Settings: ilastik path %s does not exists, cf. Settings.py or type help(Settings) for details.' % IlastikPath);
             IlastikPath = None;
 
 setup();
